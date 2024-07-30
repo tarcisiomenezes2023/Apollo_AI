@@ -7,7 +7,8 @@ import RootLayout from './layouts/rootLayout/RootLayout.jsx'
 import DashboardLayout from './layouts/dashboardLayout/DashboardLayout.jsx'
 import DashboardPage from "./routes/dashboardePage/DashboardPage.jsx"
 import ChatPage from "./routes/chatPage/ChatPage.jsx"
-
+import SignInPage from "./routes/SignUpPage/SignUpPage.jsx"
+import SignUpPage from './routes/SignUpPage/SignUpPage.jsx'
 
 const router = createBrowserRouter([
   {
@@ -16,6 +17,14 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Homepage />,
+      },
+      {
+        path: "/sign-in/*",
+        element: <SignInPage />,
+      },
+      {
+        path: "/sign-up/*",
+        element: <SignUpPage />,
       },
       {
         element: <DashboardLayout />,
@@ -37,6 +46,6 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>,
+      <RouterProvider router={router} />
+  </React.StrictMode>
 )
