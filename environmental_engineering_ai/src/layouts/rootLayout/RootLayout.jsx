@@ -9,7 +9,7 @@ const RootLayout = () => {
       <header>
         <Link to="/" className="logo">
           <img src="/Logo2.png" alt="Logo" />
-          <span>Apollo</span>
+          <span>Homepage</span>
         </Link>
         <div className="user">
           <SignedIn>
