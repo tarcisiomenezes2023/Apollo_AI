@@ -4,16 +4,14 @@ import { useAuth } from "@clerk/clerk-react"
 import { useEffect } from "react"
 
 const DashboardLayout = () => {
-
-    const {userId, isLoaded} = useAuth();
-
+    const { userId, isLoaded } = useAuth();
     const navigate = useNavigate();
 
     useEffect(() => {
         if (isLoaded && !userId) {
             navigate("/sign-in");
         }
-}, [isLoaded, userId, navigate]);
+    }, [isLoaded, userId, navigate]);
 
     if (!isLoaded) return "Loading...";
 
@@ -24,7 +22,7 @@ const DashboardLayout = () => {
                 <Outlet />
             </div>
         </div>
-  )
+    )
 }
 
 export default DashboardLayout
