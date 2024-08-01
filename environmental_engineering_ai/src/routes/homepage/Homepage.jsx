@@ -1,5 +1,6 @@
 import "./Homepage.css"
 import { Link } from "react-router-dom"
+import { TypeAnimation } from 'react-type-animation';
 
 const Homepage = () => {
   return (
@@ -17,7 +18,30 @@ const Homepage = () => {
             <div className="bg"></div>
           </div>
           <img src="/Apollo2.png" alt="Hero" className="apollo" />
+          <div className="chat">
+            <img src="/Apollo2.png" alt="Hero chat" />
+          <TypeAnimation sequence={[
+            'Innovative solutions for a sustainable future.',
+            2000, 
+            'Empowering students with cutting-edge solutions for a sustainable tomorrow.',
+            2000,
+            'Transforming data into actionable environmental insights.',
+            2000,
+            'Harnessing technology to protect our planet.',
+            2000 ]}
+            wrapper="span"
+            speed={60}
+            style={{ fontSize: '1.2em', display: 'inline-block' }}
+            repeat={Infinity}
+            cursor={true}
+            omitDeletionAnimation={true}
+            />
+          </div>
         </div>
+      </div>
+      <div className="dev">
+        <a href="htpps://github.com/tarcisiomenezes2023"><img src="/websiteIcon.png" alt="webIcon" /></a>
+        <span>By Tarcísio Menezes</span>
       </div>
     </div>
   )

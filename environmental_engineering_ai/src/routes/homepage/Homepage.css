@@ -4,6 +4,11 @@
     gap: 100px;
     height: 100%;
 
+    @media screen and (max-width: 1024px) {
+        flex-direction: column;
+        gap: 0px;
+    }
+
     .left {
         flex: 1;
         display: flex;
@@ -19,6 +24,10 @@
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
+
+            @media screen and (max-width: 1024px) {
+                font-size: 64px;
+            }
         }
         h2 {
             font-size: 25px;
@@ -29,6 +38,10 @@
             -webkit-background-clip: text;
             color: transparent;
             padding: 15px 25px;
+
+            @media screen and (max-width: 1024px) {
+                max-width: 100%;
+            }
         }
         h3 {
             font-size: 15px;
@@ -93,6 +106,32 @@
                 object-fit: contain;
                 animation: 3s ease-in-out infinite alternate botAnimate;
             }
+
+            .chat {
+                position: absolute;
+                bottom: -30px;
+                right: -50px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 20px;
+                background-color: #030313;
+                border-radius: 10px;
+
+                @media screen and (max-width: 1100px) {
+                    right: 0;
+                }
+                @media screen and (max-width: 1024px) {
+                    display: none;
+                }
+
+                img {
+                    width: 32px;
+                    height: 32px;
+                    border: 50%;
+                    object-fit: cover;
+                }
+            }
         }
 
     }
@@ -104,6 +143,28 @@
         opacity: 0.06;
         animation: 20s linear infinite rotateOrbital;
         z-index: -1;
+    }
+
+    .dev {
+        position: absolute;
+        bottom: 0;
+        text-align: center;
+        gap: 10px;
+        max-height: 60px;
+
+        img {
+            height: 20px;
+            width: 20px;
+            margin-right: 10px;
+            transition: 0.5s;
+
+            &:hover {
+                transform: scale(1.05);
+            }
+        }
+        span {
+            font-size: 10px;
+        }
     }
 }
 
