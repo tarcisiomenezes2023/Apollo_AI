@@ -76,10 +76,11 @@
             align-items: center;
             justify-content: center;
             background-color: #030313;
-            border-radius: 50px;
+            border-radius: 40px;
             width: 80%;
             height: 60%;
             position: relative;
+            
 
             .bgContainer {
                 width: 100%;
@@ -109,13 +110,14 @@
 
             .chat {
                 position: absolute;
-                bottom: -30px;
-                right: -50px;
+                bottom: 5px;
+                right: 0px;
                 display: flex;
                 align-items: center;
                 gap: 10px;
-                padding: 20px;
-                background-color: #030313;
+                padding: 5px;
+                max-width: 100%;
+                background-color: #3c3c47;
                 border-radius: 10px;
 
                 @media screen and (max-width: 1100px) {
@@ -142,7 +144,7 @@
         left: 0;
         opacity: 0.06;
         animation: 20s linear infinite rotateOrbital;
-        z-index: -1;
+        z-index: -2;
     }
 
     .dev {

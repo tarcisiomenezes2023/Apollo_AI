@@ -20,18 +20,19 @@ const Homepage = () => {
           <img src="/Apollo2.png" alt="Hero" className="apollo" />
           <div className="chat">
             <img src="/Apollo2.png" alt="Hero chat" />
-          <TypeAnimation sequence={[
-            'Innovative solutions for a sustainable future.',
+          <TypeAnimation className="text" sequence={[
+            ': Innovative solutions for a sustainable future.',
             2000, 
-            'Empowering students with cutting-edge solutions for a sustainable tomorrow.',
+            ': Empowering students with cutting-edge solutions for a sustainable tomorrow.',
             2000,
-            'Transforming data into actionable environmental insights.',
+            ': Transforming data into actionable environmental insights.',
             2000,
-            'Harnessing technology to protect our planet.',
+            ': Harnessing technology to protect our planet.',
             2000 ]}
             wrapper="span"
             speed={60}
-            style={{ fontSize: '1.2em', display: 'inline-block' }}
+            style={{ fontSize: '14px', display: 'inline-block',
+            maxWidth: "500px" }}
             repeat={Infinity}
             cursor={true}
             omitDeletionAnimation={true}
