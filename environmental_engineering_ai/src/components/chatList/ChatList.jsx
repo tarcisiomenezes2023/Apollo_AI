@@ -3,10 +3,10 @@ import { Link } from "react-router-dom"
 
 const ChatList = () => {
   return (
-    <div className="chatlist">
+    <div className="chatList">
       <span className="title">DASHBOARD</span>
       <Link to="/dashboard">Create a new chat</Link>
-      <Link to="/">Explore</Link>
+      <Link to="/">Explore Apollo AI</Link>
       <Link to="/">Contact</Link>
       <hr />
       <span className="title">RECENT CHATS</span>

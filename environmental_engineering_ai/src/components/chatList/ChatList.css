@@ -9,7 +9,7 @@
         background-color: #ddd;
         opacity: 0.1;
         border-radius: 5px;
-        margin: 20px;
+        margin: 20px 0px;
     }
 
     .title {
@@ -42,6 +42,11 @@
         img {
             width: 24px;
             height: 24px;
+        }
+        .text {
+            display: flex;
+            flex-direction: column;
+
         }
     }
 }

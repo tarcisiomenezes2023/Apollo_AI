@@ -5,7 +5,7 @@ const DashboardPage = () => {
     <div className="dashboardPage">
       <div className="texts">
         <div className="logo">
-          <img src="/logo2.png" alt="logo" />
+          <img src="/Logo2.png" alt="logo" />
           <h1>Apollo</h1>
         </div>
         <div className="options">
@@ -17,7 +17,7 @@ const DashboardPage = () => {
           <span>Analyze Images</span>
         </div>
         <div className="options">
-          <img src="/code.png" alt="" />
+          <img src="/code.jpg" alt="" />
           <span>Help me with my Code</span>
         </div>
       </div>
