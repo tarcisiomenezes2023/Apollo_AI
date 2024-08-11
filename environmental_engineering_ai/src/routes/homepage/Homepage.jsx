@@ -41,7 +41,7 @@ const Homepage = () => {
         </div>
       </div>
       <div className="dev">
-        <a href="https://github.com/tarcisiomenezes2023" target="blank"><img src="/websiteIcon.png" alt="webIcon" /></a>
+        <a href="https://tarcisiomenezes.netlify.app" target="blank"><img src="/websiteIcon.png" alt="webIcon" /></a>
         <span>By Tarcísio Menezes</span>
       </div>
     </div>

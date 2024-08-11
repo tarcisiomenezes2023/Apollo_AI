@@ -61,7 +61,7 @@
     }
     .formContainer {
         margin-top: auto;
-        width: 50%;
+        width: 20%;
         background-color: #2c2937;
         border-radius: 20px;
         display: flex;
@@ -101,6 +101,5 @@
                 }
             }
         }
-
     }
 }
