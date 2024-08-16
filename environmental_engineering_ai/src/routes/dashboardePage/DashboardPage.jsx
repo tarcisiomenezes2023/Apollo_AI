@@ -9,24 +9,27 @@ const DashboardPage = () => {
           <h1>Apollo</h1>
         </div>
         <div className="options">
-          <img src="/chat.png" alt="" />
-          <span>Create a New Chat</span>
-        </div>
-        <div className="options">
-          <img src="/image.png" alt="" />
-          <span>Analyze Images</span>
-        </div>
-        <div className="options">
-          <img src="/code.jpg" alt="" />
-          <span>Help me with my Code</span>
+          <div className="option">
+            <img src="/chat.png" alt="" />
+            <span>Create a New Chat</span>
+          </div>
+          <div className="option">
+            <img src="/image.png" alt="" />
+            <span>Analyze Images</span>
+          </div>
+          <div className="option">
+            <img src="/code.jpg" alt="" />
+            <span>Analyze and Debugging code</span>
+          </div>
         </div>
       </div>
       <div className="formContainer">
-        <input type="text" placeholder="Ask me anything..." />
-        <button>
-          <img src="/arrow.png" alt="" />
-        </button>
-        <form />
+        <form>
+          <input type="text" placeholder="Ask me anything..." />
+          <button>
+            <img src="/arrow.png" alt="" />
+          </button>
+        </form>
       </div>
     </div>
   )

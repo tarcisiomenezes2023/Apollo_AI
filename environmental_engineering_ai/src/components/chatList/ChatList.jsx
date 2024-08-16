@@ -24,7 +24,7 @@ const ChatList = () => {
       </div>
       <hr />
       <div className="upgrade">
-        <img src="/logo2.png" alt="Logo" />
+        <img src="/Logo2.png" alt="Logo" />
         <div className="texts">
         </div>
       </div>
