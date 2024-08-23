@@ -49,7 +49,7 @@
         }
         a {
             padding: 15px 25px;
-            background-color: #217bfe;
+            background-color: #1bec49;
             color: white;
             border-radius: 20px;
             font-size: 14px;
@@ -59,7 +59,7 @@
 
             &:hover {
                 background-color: white;
-                color: #217bfe;
+                color: #1bec49;
             }
         }
     }
