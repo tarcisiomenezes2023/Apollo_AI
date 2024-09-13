@@ -1,8 +1,8 @@
+import NewPrompt from "../../components/chatList/newPrompt/NewPrompt.jsx";
 import "./ChatPage.jsx"
-import { useRef } from "react";
 
 const ChatPage = () => {
-  const endref = useRef(null)
+
   return (
     <div className="chatPage">
       <div className="wrapper">
@@ -33,7 +33,7 @@ const ChatPage = () => {
           <div className="message user">Test message from USER</div>
           <div className="message">Test message from AI</div>
           <div className="message user">Test message from USER</div>
-          <div ref={endref} />
+          <NewPrompt />
         </div>
       </div>
     </div>
