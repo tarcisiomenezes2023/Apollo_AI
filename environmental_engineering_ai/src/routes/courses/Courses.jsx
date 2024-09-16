@@ -4,7 +4,7 @@ const Courses = () => {
   return (
     <div className='coursesPage'>
       <div className="text">
-        <h1></h1>
+        <h1>Choose a topic to display here</h1>
       </div>
     </div>
   )
