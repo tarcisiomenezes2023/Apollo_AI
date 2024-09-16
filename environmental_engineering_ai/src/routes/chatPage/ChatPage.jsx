@@ -8,9 +8,7 @@ const ChatPage = () => {
       <div className="wrapper">
         <div className="chat">
           <div className="message">Test message from AI</div>
-          <div className="message user">
-            Test message from USER aésldaédlasédlasádéassdáaldáasédlasápdlasáédqwpdláwdpqklwpdlqwekqpeqáwpeqőwelqwőepqwáepqwrpqkrqpwrkqpwfkkgorjgeojgdskjgkskhgdksdhgskdsdfsdgfdhfgjtzututzj
-          </div>
+          <div className="message user">MESSAGE FROM THE USER</div>
           <div className="message">Test message from AI</div>
           <div className="message user">Test message from USER</div>
           <div className="message">Test message from AI</div>

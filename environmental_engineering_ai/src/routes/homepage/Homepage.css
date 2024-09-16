@@ -20,7 +20,7 @@
 
         h1 {
             font-size: 128px;
-            background: linear-gradient(to right, #217bfe, #e55571);
+            background: linear-gradient(to right, #33ff28, #e55571);
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
@@ -140,11 +140,14 @@
 
     .backgroundHomepage {
         position: absolute;
-        bottom: 0;
-        left: 0;
+        top: 50px;
+        left: 150px;
         opacity: 0.06;
         animation: 20s linear infinite rotateOrbital;
         z-index: -2;
+        height: 500px;
+        width: 500px;
+        border-radius: 50%;
     }
 
     .dev {
@@ -175,7 +178,7 @@
         transform: rotate(0deg);
     }
     100% {
-        transform: rotate(30deg);
+        transform: rotate(150deg);
     }
 }
 

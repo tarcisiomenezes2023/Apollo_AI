@@ -1,0 +1,52 @@
+.courseList {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    hr {
+        border: none;
+        height: 2px;
+        background-color: #ffffff;
+        opacity: 0.2;
+        border-radius: 5px;
+        margin: 20px 0px;
+    }
+
+    .title {
+        font-weight: 600;
+        font-size: 10px;
+        margin-bottom: 10px;
+    }
+
+    .list {
+        display: flex;
+        flex-direction: column;
+        overflow: scroll;
+    }
+
+    a {
+        padding: 10px;
+        border-radius: 10px;
+        color: greenyellow;
+        &:hover {
+            background-color: #252323;
+        }
+    }
+
+    .upgrade {
+        margin-top: auto;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        img {
+            width: 30px;
+            height: 30px;
+        }
+
+        .text {
+            display: flex;
+            flex-direction: column;
+        }
+    }
+}

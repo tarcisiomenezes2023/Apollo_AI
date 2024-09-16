@@ -10,6 +10,9 @@ import DashboardPage from "./routes/dashboardePage/DashboardPage.jsx"
 import ChatPage from './routes/chatPage/ChatPage.jsx';
 import SignInPage from './routes/signInPage/SignInPage.jsx';
 import SignUpPage from './routes/SignUpPage/SignUpPage.jsx';
+import Mate_layout from './layouts/matelayout/Mate_layout.jsx';
+import Courses from './routes/courses/Courses.jsx';
+import Material from './routes/courses/materials/Material.jsx';
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
@@ -19,10 +22,10 @@ if (!PUBLISHABLE_KEY) {
 
 const router = createBrowserRouter([
   {
-    element: <RootLayout />,
+    element: <RootLayout />, 
     children: [
       {
-        path: '/',
+        path: '/', 
         element: <Homepage />,
       },
       {
@@ -34,14 +37,27 @@ const router = createBrowserRouter([
         element: <SignUpPage />,
       },
       {
-        element: <DashboardLayout />,
+        element: <Mate_layout />, 
         children: [
           {
-            path: '/dashboard',
+            path: '/courses', 
+            element: <Courses />,
+          },
+          {
+            path: '/courses/materials/:id',  
+            element: <Material />,
+          },
+        ],
+      },
+      {
+        element: <DashboardLayout />, 
+        children: [
+          {
+            path: '/dashboard', 
             element: <DashboardPage />,
           },
           {
-            path: '/dashboard/chats/:id',
+            path: '/dashboard/chats/:id', 
             element: <ChatPage />,
           },
         ],

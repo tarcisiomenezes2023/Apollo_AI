@@ -10,7 +10,7 @@ const Homepage = () => {
         <h1>Apollo</h1>
         <h2>Your AI Environmental Engineer!</h2>
         <h3>Making the world a greener place, one solution at a time.</h3>
-        <Link to="/dashboard">Get Started</Link>
+        <Link to="/courses">Get Started</Link>
       </div>
       <div className="right">
         <div className="imgContainer">

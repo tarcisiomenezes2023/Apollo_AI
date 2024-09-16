@@ -1,27 +1,26 @@
-import { Outlet } from 'react-router-dom';
-import './RootLayout.css';
-import { Link } from 'react-router-dom';
+import { Link, Outlet } from "react-router-dom"
 import { SignedIn, UserButton } from '@clerk/clerk-react';
+import "./RootLayout.css"
 
 const RootLayout = () => {
   return (
-    <div className="rootlayout">
+    <div className="rootLayout">
       <header>
         <Link to="/" className="logo">
-          <img src="/Logo2.png" alt="Logo" />
-          <span>Homepage</span>
+        <img src="/logo3.png" alt="Logo" />
+        <span>Homepage</span>
         </Link>
-        <div className="user">
+        <div className="users">
           <SignedIn>
             <UserButton />
           </SignedIn>
-        </div>
+          </div>
       </header>
       <main>
         <Outlet />
       </main>
     </div>
-  );
-};
+  )
+}
 
-export default RootLayout;
+export default RootLayout
