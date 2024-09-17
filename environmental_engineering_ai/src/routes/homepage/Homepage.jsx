@@ -5,7 +5,11 @@ import { TypeAnimation } from 'react-type-animation';
 const Homepage = () => {
   return (
     <div className="homepage">
-      <img src="/background2.jpg" alt="background homepage" className="backgroundHomepage" />
+      <img src="/background2.jpg" alt="background homepage" className="backgroundHomepage one" />
+      <img src="/background2.jpg" alt="background homepage" className="backgroundHomepage two" />
+      <img src="/background2.jpg" alt="background homepage" className="backgroundHomepage three" />
+      <img src="/background2.jpg" alt="background homepage" className="backgroundHomepage four" />
+      <img src="/background2.jpg" alt="background homepage" className="backgroundHomepage five" />
       <div className="left">
         <h1>Apollo</h1>
         <h2>Your AI Environmental Engineer!</h2>

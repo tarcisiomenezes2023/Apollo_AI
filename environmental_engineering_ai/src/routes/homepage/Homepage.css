@@ -142,12 +142,37 @@
         position: absolute;
         top: 50px;
         left: 150px;
-        opacity: 0.06;
-        animation: 20s linear infinite rotateOrbital;
+        opacity: 0.15;
+        animation: 60s linear infinite rotateOrbital;
         z-index: -2;
-        height: 500px;
-        width: 500px;
+        height: 250px;
+        width: 250px;
         border-radius: 50%;
+    }
+    
+    .backgroundHomepage.one {
+        top: 100px;
+        left: 40px;
+    }
+    
+    .backgroundHomepage.two {
+        top: 200px;
+        left: 300px;
+    }
+    
+    .backgroundHomepage.three {
+        top: 400px;
+        left: 600px;
+    }
+    
+    .backgroundHomepage.four {
+        top: 50px;
+        left: 600px;
+    }
+    
+    .backgroundHomepage.five {
+        top: 10px;
+        left: 1000px;
     }
 
     .dev {
@@ -175,10 +200,10 @@
 
 @keyframes rotateOrbital {
     0% {
-        transform: rotate(0deg);
+        transform: rotate(-500deg);
     }
     100% {
-        transform: rotate(150deg);
+        transform: rotate(500deg);
     }
 }
 
