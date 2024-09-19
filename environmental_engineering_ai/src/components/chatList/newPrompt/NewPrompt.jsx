@@ -22,20 +22,18 @@ const NewPrompt = () => {
     history: [
       {
         role: "user",
-        parts: [{ text: "Hello, I have 2 dogs in my house"}],
+        parts: [{ text: "Hello, I have 2 dogs in my house" }],
       },
       {
         role: "model",
-        parts: [{
-          role: "model",
-          parts: [{ text: "Great to meet you. What would you like to know?" }],
-        }],
+        parts: [{ text: "Great to meet you. What would you like to know?" }],
       },
     ],
     generationConfig: {
       maxOutputTokens: 100,
-    }
-  })
+    },
+  });
+  
   const endRef = useRef(null);
 
   useEffect(() => {
