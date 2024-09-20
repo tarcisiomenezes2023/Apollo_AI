@@ -4,13 +4,13 @@ import { getFirestore } from 'firebase/firestore'; // Adicione Firestore para o 
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCpfWPp2Jsijxhslg7PV2vkbXx1K0TBZas",
-  authDomain: "apollodb-1ce91.firebaseapp.com",
-  projectId: "apollodb-1ce91",
-  storageBucket: "apollodb-1ce91.appspot.com",
-  messagingSenderId: "80302137507",
-  appId: "1:80302137507:web:1ceabd754084ba4386df16",
-  measurementId: "G-JW5HHMXTXH"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
 // Initialize Firebase
