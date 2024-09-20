@@ -3,20 +3,20 @@ import "./NewPrompt.css";
 import Upload from "../../upload/Upload";
 import { IKImage } from "imagekitio-react";
 import model from "../../../lib/gemini";
-import Markdown from "react-markdown";
-import { saveMessage, fetchMessages } from "../../../Firebase/Utilities/FireBaseUtilities";
+import Markdown from "react-markdown"
 
 const NewPrompt = () => {
+  
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
-  const [messages, setMessages] = useState([]); // Para armazenar o histórico de mensagens
+
 
   const [img, setImg] = useState({
     isLoading: false,
     error: "",
     dbData: {},
     aiData: {},
-  });
+  })
 
   const chat = model.startChat({
     history: [
@@ -33,61 +33,46 @@ const NewPrompt = () => {
       maxOutputTokens: 100,
     },
   });
-
+  
   const endRef = useRef(null);
 
   useEffect(() => {
     endRef.current.scrollIntoView({ behavior: "smooth" });
   }, [question, answer, img.dbData]);
 
-  // Função para carregar histórico do Firebase
-  useEffect(() => {
-    const loadMessages = async () => {
-      const loadedMessages = await fetchMessages('user123'); // Troque para o ID de usuário real
-      setMessages(loadedMessages);
-    };
-    loadMessages();
-  }, []);
-
   const add = async (text) => {
-    setQuestion(text);
+    setQuestion(text)
 
     const result = await chat.sendMessageStream(
       Object.entries(img.aiData).length ? [img.aiData, text] : [text]
-    );
+    )
     let accumulatedText = '';
     for await (const chunk of result.stream) {
       const chunkText = chunk.text();
+      console.log(chunkText);
       accumulatedText += chunkText; 
-      setAnswer(accumulatedText);
+      setAnswer(accumulatedText)
     }
 
-    // Salvar a mensagem e a resposta no Firebase
-    await saveMessage('user123', { question: text, answer: accumulatedText }); // Troque o ID de usuário
-
-    setImg({ isLoading: false, error: "", dbData: {}, aiData: {} });
-  };
+    setImg({isLoading: false,
+      error: "",
+      dbData: {},
+      aiData: {},})
+  }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     const text = e.target.text.value;
     if (!text) return;
 
-    add(text);
-  };
+    add(text)
+  }
+
 
   return (
     <>  
-      {/* Exibir histórico de mensagens */}
-      {messages.map((msg, index) => (
-        <div key={index}>
-          <div className="message user">{msg.question}</div>
-          <div className="message"><Markdown>{msg.answer}</Markdown></div>
-        </div>
-      ))}
-
-      {/* Novo chat */}
+      {/* ADD NEW CHAT */}
       {img.isLoading && <div className="">Loading...</div>}
 
       {img.dbData?.filePath && (
@@ -96,7 +81,7 @@ const NewPrompt = () => {
           path={img.dbData?.filePath}
           width="380" 
           transformation={[{ width: 380 }]} 
-        />
+          />
       )}
       {question && <div className="message user">{question}</div>}
       {answer && <div className="message"><Markdown>{answer}</Markdown></div>}
