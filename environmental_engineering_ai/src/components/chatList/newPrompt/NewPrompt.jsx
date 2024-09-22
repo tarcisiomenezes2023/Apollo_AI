@@ -79,6 +79,7 @@ const NewPrompt = () => {
 
     setImg((prevState) => ({ ...prevState, isLoading: true }));
     add(text);
+
   };
 
   return (
