@@ -3,6 +3,7 @@ import { Link } from "react-router-dom"
 import { TypeAnimation } from 'react-type-animation';
 
 const Homepage = () => {
+
   return (
     <div className="homepage">
       <img src="/background2.jpg" alt="background homepage" className="backgroundHomepage one" />
