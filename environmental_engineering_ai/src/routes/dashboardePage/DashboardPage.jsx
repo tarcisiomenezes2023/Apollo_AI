@@ -1,28 +1,44 @@
-import "./DashboardPage.css"
-import { useAuth } from '@clerk/clerk-react'
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
+import "./DashboardPage.css";
+import { useAuth } from '@clerk/clerk-react';
 
 const DashboardPage = () => {
-
   const { userId } = useAuth();
+  const queryClient = useQueryClient();
+  const navigate = useNavigate(); // Initialize useNavigate
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const text = e.target.text.value;
-    if (!text) return;
-  
-    try {
-      await fetch('http://localhost:3000/api/chats', { 
+  // Mutation for creating a new chat
+  const mutation = useMutation({
+    mutationFn: (text) => {
+      return fetch(`${import.meta.env.VITE_API_URL}/api/chats`, {
         method: 'POST',
-        credentials: 'include', 
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ text, userId }), 
-      });
-  
-    } catch (error) {
-      console.error('Error while sending request:', error);
+        body: JSON.stringify({ text, userId }), // Include userId in the request body
+      }).then((res) => res.json());
+    },
+    onSuccess: (data) => {
+      // Invalidate queries to refetch the updated chats
+      queryClient.invalidateQueries({ queryKey: ["userChats"] });
+      // Navigate to the new chat's page using the returned id
+      navigate(`/dashboard/chats/${data.id}`);
+    },
+    onError: (error) => {
+      console.error("Error creating chat:", error);
     }
+  });
+
+  // Handle form submission
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const text = e.target.text.value;
+    if (!text) return;
+
+    // Trigger mutation
+    mutation.mutate(text);
   };
 
   return (
@@ -34,29 +50,29 @@ const DashboardPage = () => {
         </div>
         <div className="options">
           <div className="option">
-            <img src="/chat.png" alt="" />
+            <img src="/chat.png" alt="Chat icon" />
             <span>Create a New Chat</span>
           </div>
           <div className="option">
-            <img src="/image.png" alt="" />
+            <img src="/image.png" alt="Image icon" />
             <span>Analyze Images</span>
           </div>
           <div className="option">
-            <img src="/code.jpg" alt="" />
-            <span>Analyze and Debugging code</span>
+            <img src="/code.jpg" alt="Code icon" />
+            <span>Analyze and Debugging Code</span>
           </div>
         </div>
       </div>
       <div className="formContainer">
         <form onSubmit={handleSubmit}>
           <input type="text" name="text" placeholder="Ask anything..." />
-          <button>
-            <img src="/arrow.png" alt="" />
+          <button type="submit">
+            <img src="/arrow.png" alt="Submit arrow" />
           </button>
         </form>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default DashboardPage
+export default DashboardPage;

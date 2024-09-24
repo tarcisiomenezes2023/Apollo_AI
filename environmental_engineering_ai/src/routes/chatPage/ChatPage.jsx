@@ -40,7 +40,7 @@ const ChatPage = () => {
               </div>
             </div>
           ))}
-          <NewPrompt />
+          {data && <NewPrompt data={data}/>}
         </div>
       </div>
     </div>

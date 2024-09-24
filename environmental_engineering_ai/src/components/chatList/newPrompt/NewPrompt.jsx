@@ -4,8 +4,9 @@ import Upload from "../../upload/Upload";
 import { IKImage } from "imagekitio-react";
 import model from "../../../lib/gemini";
 import Markdown from "react-markdown";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-const NewPrompt = () => {
+const NewPrompt = ({ data }) => {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
 
@@ -33,14 +34,57 @@ const NewPrompt = () => {
   });
 
   const endRef = useRef(null);
+  const formRef = useRef(null);
 
   useEffect(() => {
     if (endRef.current) {
       endRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [question, answer, img.dbData]);
+  }, [data, question, answer, img.dbData]);
 
-  const add = async (text) => {
+
+  const queryClient = useQueryClient();
+
+  // Mutation for creating a new chat
+  const mutation = useMutation({
+    mutationFn: (text) => {
+      return fetch(`${import.meta.env.VITE_API_URL}/api/chats/${data._id}`, {
+        method: 'PUT',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          question: question.length ? question : undefined,
+          answer, img: img.dbData?.filePath || undefined, 
+        }), 
+      }).then((res) => res.json());
+    },
+    onSuccess: (data) => {
+      // Invalidate queries to refetch the updated chats
+      queryClient.invalidateQueries({ queryKey: ["chat", data._id] })
+      .then(()=> {
+        formRef.current.reset();
+        setQuestion("");
+        setAnswer("")
+        setImg({
+          isLoading: false,
+          error: "",
+          dbData: {},
+          aiData: {},
+        }),
+        onError:(err) => console.log(err)
+      });
+      // Navigate to the new chat's page using the returned id
+      navigate(`/dashboard/chats/${data.id}`);
+    },
+    onError: (error) => {
+      console.error("Error creating chat:", error);
+    }
+  });
+
+  const add = async (text, isInitial) => {
+    if (!isInitial) { setQuestion(text)}
     setQuestion(text);
 
     try {
@@ -54,14 +98,7 @@ const NewPrompt = () => {
         accumulatedText += chunkText;
         setAnswer(accumulatedText);
       }
-
-      // Reset img state after successful AI response
-      setImg({
-        isLoading: false,
-        error: "",
-        dbData: {},
-        aiData: {},
-      });
+      mutation.mutate()
     } catch (error) {
       console.error("Error occurred during AI response:", error);
       setImg((prevState) => ({
@@ -78,9 +115,26 @@ const NewPrompt = () => {
     if (!text) return;
 
     setImg((prevState) => ({ ...prevState, isLoading: true }));
-    add(text);
+    add(text, false);
 
   };
+
+  /* IN PRODUCTION WE DON't NEED IT */
+  const hasRun = useRef(false)
+  useEffect(() => {
+    if (!hasRun.current) { 
+      if (data?.history?.length === 1) {
+        add(data.history[0].parts[0].text, true);
+      }
+    }
+    hasRun.current = true;
+  }, [])
+
+  useEffect(() => {
+    if(data?.history?.length === 1) {
+      add(data.history[0].parts[0].text, true);
+    }
+  })
 
   return (
     <>  
@@ -103,8 +157,8 @@ const NewPrompt = () => {
       
       <div className="endChat" ref={endRef}></div>
       
-      <div className="newPrompt" onSubmit={handleSubmit}>
-        <form className="newForm">
+      <div className="newPrompt">
+        <form className="newForm" onSubmit={handleSubmit} ref={formRef}>
           <Upload setImg={setImg} />
           <input id="file" type="file" multiple={false} hidden />
           <input type="text" name="text" placeholder="Ask anything..." />
