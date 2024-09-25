@@ -1,10 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import "./NewPrompt.css";
 import Upload from "../../upload/Upload";
 import { IKImage } from "imagekitio-react";
 import model from "../../../lib/gemini";
 import Markdown from "react-markdown";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import PropTypes from 'prop-types';
 
 const NewPrompt = ({ data }) => {
   const [question, setQuestion] = useState("");
@@ -35,46 +37,40 @@ const NewPrompt = ({ data }) => {
 
   const endRef = useRef(null);
   const formRef = useRef(null);
-
-  useEffect(() => {
-    if (endRef.current) {
-      endRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [data, question, answer, img.dbData]);
-
+  const navigate = useNavigate(); // Define navigate
 
   const queryClient = useQueryClient();
 
   // Mutation for creating a new chat
   const mutation = useMutation({
-    mutationFn: (text) => {
+    mutationFn: () => { // Removed unused 'text' argument
       return fetch(`${import.meta.env.VITE_API_URL}/api/chats/${data._id}`, {
         method: 'PUT',
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           question: question.length ? question : undefined,
-          answer, img: img.dbData?.filePath || undefined, 
-        }), 
+          answer,
+          img: img.dbData?.filePath || undefined,
+        }),
       }).then((res) => res.json());
     },
     onSuccess: (data) => {
-      // Invalidate queries to refetch the updated chats
       queryClient.invalidateQueries({ queryKey: ["chat", data._id] })
-      .then(()=> {
+      .then(() => {
         formRef.current.reset();
         setQuestion("");
-        setAnswer("")
+        setAnswer("");
         setImg({
           isLoading: false,
           error: "",
           dbData: {},
           aiData: {},
-        }),
-        onError:(err) => console.log(err)
+        });
       });
+
       // Navigate to the new chat's page using the returned id
       navigate(`/dashboard/chats/${data.id}`);
     },
@@ -83,8 +79,9 @@ const NewPrompt = ({ data }) => {
     }
   });
 
-  const add = async (text, isInitial) => {
-    if (!isInitial) { setQuestion(text)}
+  // Memoize 'add' to prevent unnecessary re-renders
+  const add = useCallback(async (text, isInitial) => {
+    if (!isInitial) { setQuestion(text); }
     setQuestion(text);
 
     try {
@@ -94,11 +91,10 @@ const NewPrompt = ({ data }) => {
       let accumulatedText = "";
       for await (const chunk of result.stream) {
         const chunkText = chunk.text();
-        console.log(chunkText);
         accumulatedText += chunkText;
         setAnswer(accumulatedText);
       }
-      mutation.mutate()
+      mutation.mutate();
     } catch (error) {
       console.error("Error occurred during AI response:", error);
       setImg((prevState) => ({
@@ -107,7 +103,7 @@ const NewPrompt = ({ data }) => {
       }));
       setAnswer("Sorry, your request couldn't be processed due to safety reasons.");
     }
-  };
+  }, [chat, img.aiData, mutation]); // Added dependencies
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -116,47 +112,36 @@ const NewPrompt = ({ data }) => {
 
     setImg((prevState) => ({ ...prevState, isLoading: true }));
     add(text, false);
-
   };
 
-  /* IN PRODUCTION WE DON't NEED IT */
-  const hasRun = useRef(false)
+  const hasRun = useRef(false);
   useEffect(() => {
-    if (!hasRun.current) { 
-      if (data?.history?.length === 1) {
-        add(data.history[0].parts[0].text, true);
-      }
-    }
-    hasRun.current = true;
-  }, [])
-
-  useEffect(() => {
-    if(data?.history?.length === 1) {
+    if (!hasRun.current && data?.history?.length === 1) {
       add(data.history[0].parts[0].text, true);
+      hasRun.current = true;
     }
-  })
+  }, [data, add]); // Add 'add' to dependencies
 
   return (
-    <>  
+    <>
       {/* ADD NEW CHAT */}
       {img.isLoading && <div className="">Loading...</div>}
-
       {img.error && <div className="error">{img.error}</div>}
 
       {img.dbData?.filePath && (
         <IKImage
           urlEndpoint={import.meta.env.VITE_IMAGE_KIT_ENDPOINT}
           path={img.dbData?.filePath}
-          width="380" 
-          transformation={[{ width: 380 }]} 
+          width="380"
+          transformation={[{ width: 380 }]}
         />
       )}
-      
+
       {question && <div className="message user">{question}</div>}
       {answer && <div className="message"><Markdown>{answer}</Markdown></div>}
-      
+
       <div className="endChat" ref={endRef}></div>
-      
+
       <div className="newPrompt">
         <form className="newForm" onSubmit={handleSubmit} ref={formRef}>
           <Upload setImg={setImg} />
@@ -169,6 +154,23 @@ const NewPrompt = ({ data }) => {
       </div>
     </>
   );
+};
+
+NewPrompt.propTypes = {
+  data: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired, // Added 'id' prop validation
+    history: PropTypes.arrayOf(
+      PropTypes.shape({
+        role: PropTypes.string,
+        parts: PropTypes.arrayOf(
+          PropTypes.shape({
+            text: PropTypes.string,
+          })
+        )
+      })
+    )
+  }).isRequired,
 };
 
 export default NewPrompt;
