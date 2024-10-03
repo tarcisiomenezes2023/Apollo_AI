@@ -1,0 +1,30 @@
+@keyframes slideBg {
+    0% {
+      transform: translateX(0deg);
+    }
+    100% {
+      transform: translateX(-50deg);
+    }
+  }
+  
+  .bg {
+    background-image: url("/Apollo_background.jpg");
+    background-size: auto 100%;
+  }
+  
+  .animate-slideBg {
+    animation: slideBg 8s ease-in-out infinite alternate;
+  }
+  @keyframes botAnimate {
+    0% {
+      transform: scale(1) rotate(0deg);
+    }
+    100% {
+      transform: scale(1.1) rotate(-5deg);
+    }
+  }
+  
+  .animate-botAnimate {
+    animation: botAnimate 3s ease-in-out infinite alternate;
+  }
+  
