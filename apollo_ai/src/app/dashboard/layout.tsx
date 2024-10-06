@@ -1,17 +1,14 @@
+import ChatList from "../components/chatList/page";
+
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <div>
-      <header>
-        <h1>Dashboard Header</h1>
-      </header>
-      <main>{children}</main>  {/* Aqui é onde o conteúdo das páginas do dashboard será renderizado */}
-      <footer>
-        <p>Dashboard Footer</p>
-      </footer>
+    <div className="flex gap-12 pt-5 h-full">
+      <div className="flex-4"> <ChatList /> </div>
+      <main className="flex-1 bg-[#030a2e]">{children}</main>  
     </div>
   );
 }

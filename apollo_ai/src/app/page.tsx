@@ -66,6 +66,12 @@ export default function Home() {
             />
           </div>
         </div>
+        <footer className="absolute bottom-0 right-60">
+          <a href="https://tarcisiomenezes.netflify.app" target="blank" className="flex items-center">
+            <img src="/websiteIcon.png" alt="WebIcon" className="h-5 w-5 mr-2.5" />
+            <span>By Tarcísio Menezes</span>
+          </a>
+        </footer>
       </div>
     </div>
   );
