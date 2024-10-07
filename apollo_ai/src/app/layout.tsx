@@ -1,6 +1,14 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Link from "next/link";
+import {
+  ClerkProvider,
+  SignIn,
+  SignInButton,
+  SignedIn,
+  SignedOut,
+  UserButton
+} from '@clerk/nextjs'
 
 
 export const metadata: Metadata = {
@@ -14,6 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    <ClerkProvider>
     <html lang="en">
       <body className="flex flex-col h-screen !p-4 !px-16">
         <header className="flex items-center justify-between">
@@ -26,12 +35,17 @@ export default function RootLayout({
               Homepage
             </span>
           </Link>
-          <div className="">Users</div>
+          <div className="users">
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
+          </div>
         </header>
         <main className="flex-1 overflow-hidden">
           {children}
         </main>
       </body>
     </html>
+    </ClerkProvider>
   );
 }
