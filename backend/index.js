@@ -1,27 +1,46 @@
 const express = require('express');
+const cors = require('cors');
 const { runGeminiAI } = require('./gemini/Api');
 const app = express();
 
-/* Middleware for JSON interpreter */
+/* Middleware para interpretar JSON */
 app.use(express.json());
+app.use(cors()); /* Permite todas as origens. Você pode restringir a origem conforme necessário. */
 
-/* Main route (GET) */
+/* Rota principal (GET) */
 app.get('/', (req, res) => {
     res.send('<h1>Hello, world!</h1>');
 });
 
-/* Route for the endpoint /chat (POST) */
+/* Objeto para armazenar o histórico de chats */
+let chatHistory = {};
+
+/* Rota para o endpoint /chat (POST) */
 app.post('/chat', async (req, res) => {
-    const { text } = req.body; /* Getting the text sent to the body */
+    const { text } = req.body;
+    const chatId = Date.now().toString();
+
     try {
-        const result = await runGeminiAI(text); /* Repassing the text for the function runGeminiAI */
-        res.status(200).json(result); /* Sending the response to the client in JSON format */
+        const result = await runGeminiAI(text);
+
+        chatHistory[chatId] = chatHistory[chatId] || [];
+        chatHistory[chatId].push({ user: text, ai: result.text });
+
+        res.status(200).json({ chatId, text: result.text });
     } catch (error) {
-        console.error('Error running the API script:', error);
-        res.status(500).send('Internal Server Error');
+        console.error('Erro ao salvar o histórico de chat:', error);
+        // Retornando uma resposta JSON válida em caso de erro
+        res.status(500).json({ error: 'Erro interno do servidor', details: error.message });
     }
 });
 
-/* Initialize the server on port 3000 */
-const port = 3000;
-app.listen(port, () => console.log(`Server is listening on port ${port}`));
+/* Rota para buscar o histórico de um chat específico (GET) */
+app.get('/chats/:id', (req, res) => {
+    const { id } = req.params;
+    // Envia o histórico de chat com base no chatId ou um array vazio se não houver histórico
+    res.status(200).json({ history: chatHistory[id] || [] });
+});
+
+/* Inicializando o servidor na porta 3000 */
+const port = 5000;
+app.listen(port, () => console.log(`Servidor está ouvindo na porta ${port}`));
