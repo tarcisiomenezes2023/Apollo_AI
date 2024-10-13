@@ -29,7 +29,11 @@ app.post('/chat', async (req, res) => {
         res.status(200).json({ chatId, text: result.text });
     } catch (error) {
         console.error('Erro ao salvar o histórico de chat:', error);
-        // Retornando uma resposta JSON válida em caso de erro
+
+        if (error.message.includes("SAFETY")) {
+            return res.status(400).json({ error: 'A entrada foi bloqueada devido a questões de segurança.' });
+        }
+
         res.status(500).json({ error: 'Erro interno do servidor', details: error.message });
     }
 });
