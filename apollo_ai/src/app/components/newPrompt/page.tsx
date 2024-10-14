@@ -39,7 +39,7 @@ const NewPrompt: React.FC<NewPromptProps> = ({ onNewMessage }) => {
     <div>
       <form
         onSubmit={handleSubmit}
-        className="w-3/5 absolute bottom-4 bg-[#2c2937] rounded-3xl flex items-center gap-5 p-0.5"
+        className="w-3/5 absolute bottom-0 bg-[#2c2937] rounded-3xl flex items-center gap-5 p-0.5"
       >
         <input
           type="text"

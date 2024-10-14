@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const { runGeminiAI } = require('./gemini/Api');
+const { db } = require('./FirebaseConfig/FirebaseConfig');
+const { doc, setDoc } = require('firebase/firestore');
 const app = express();
 
 /* Middleware para interpretar JSON */
@@ -23,10 +25,19 @@ app.post('/chat', async (req, res) => {
     try {
         const result = await runGeminiAI(text);
 
-        chatHistory[chatId] = chatHistory[chatId] || [];
-        chatHistory[chatId].push({ user: text, ai: result.text });
+        const chatData = {
+            chatId,
+            messages: [{ user: text, ai: result.text }],
+            createdAt: new Date(),
+        }
+
+        await setDoc(doc(db, 'chats', chatId), chatData) /* Save in Firestore */
+
+/*         chatHistory[chatId] = chatHistory[chatId] || [];
+        chatHistory[chatId].push({ user: text, ai: result.text }); */
 
         res.status(200).json({ chatId, text: result.text });
+
     } catch (error) {
         console.error('Erro ao salvar o histórico de chat:', error);
 
@@ -39,10 +50,21 @@ app.post('/chat', async (req, res) => {
 });
 
 /* Rota para buscar o histórico de um chat específico (GET) */
-app.get('/chats/:id', (req, res) => {
+app.get('/chats/:id', async (req, res) => {
     const { id } = req.params;
-    // Envia o histórico de chat com base no chatId ou um array vazio se não houver histórico
-    res.status(200).json({ history: chatHistory[id] || [] });
+
+     try {
+        const chatDoc = await getDoc(doc(db, 'chats', id))
+        if (!chatDoc.exists()) {
+            return res.status(404).json({ error: 'Chat not found'})
+        }
+
+    res.status(200).json({ history: chatDoc.data().messages });
+
+     } catch (error) {
+        console.error('Error to fetch chat history: ' + error.message)
+        res.status(500).json({ error: 'Error from server' })
+     }
 });
 
 /* Inicializando o servidor na porta 3000 */
