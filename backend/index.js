@@ -1,8 +1,8 @@
-const express = require('express');
+const express = require('express'); 
 const cors = require('cors');
 const { runGeminiAI } = require('./gemini/Api');
 const { db } = require('./FirebaseConfig/FirebaseConfig');
-const { ref, set, get, child } = require('firebase/database');  // Mudança para usar Realtime Database
+const { ref, set, get, child, push } = require('firebase/database'); // Importando 'push'
 const app = express();
 
 /* Middleware para interpretar JSON */
@@ -16,22 +16,25 @@ app.get('/', (req, res) => {
 
 /* Rota para o endpoint /chat (POST) */
 app.post('/chat', async (req, res) => {
-    const { text } = req.body;
-    const chatId = Date.now().toString();  // Criando um chatId único
+    const { text, chatId } = req.body; // Recebe o chatId do corpo da requisição
+
+    if (!chatId) {
+        return res.status(400).json({ error: 'Chat ID is required' });
+    }
 
     try {
         const result = await runGeminiAI(text);
 
-        const chatData = {
-            chatId,
-            messages: [{ user: text, ai: result.text }],
-            createdAt: new Date(),
-        }
+        // Criando um objeto de nova mensagem
+        const newMessage = {
+            user: text,
+            ai: result.text,
+        };
 
-        // Salvar o chat no Realtime Database
-        await set(ref(db, 'chats/' + chatId), chatData);  // Mudança para salvar no Realtime Database
+        // Salvar a nova mensagem no Realtime Database
+        await push(ref(db, `chats/${chatId}/messages`), newMessage);  // Adiciona nova mensagem ao chat existente
 
-        res.status(200).json({ chatId, text: result.text });
+        res.status(200).json({ text: result.text });
 
     } catch (error) {
         console.error('Erro ao salvar o histórico de chat:', error);
@@ -44,7 +47,7 @@ app.get('/chats/:id', async (req, res) => {
     const { id } = req.params;
 
     try {
-        const chatSnapshot = await get(child(ref(db), `chats/${id}`));  // Mudança para buscar do Realtime Database
+        const chatSnapshot = await get(child(ref(db), `chats/${id}`)); // Mudança para buscar do Realtime Database
         if (!chatSnapshot.exists()) {
             return res.status(404).json({ error: 'Chat not found' });
         }

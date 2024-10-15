@@ -1,29 +1,30 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { ref, onValue, push } from "firebase/database"; // Importando push para adicionar novas mensagens
-import { db } from '../../../config/FirebaseConfig'; // Usando db ao invés de database
+import { ref, onValue, push } from "firebase/database";
+import { db } from '../../../config/FirebaseConfig';
 import { useParams } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
-import NewPrompt from "../../../components/newPrompt/page"; // Importando o NewPrompt
+import NewPrompt from "../../../components/newPrompt/page";
 
 const ChatPage = () => {
   const { id } = useParams();
+  const chatId = Array.isArray(id) ? id[0] : id; // Ensure chatId is a string
   const [chatHistory, setChatHistory] = useState<{ user: string; ai: string }[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!id) return;
+    if (!chatId) return;
 
-    const chatRef = ref(db, `chats/${id}/messages`); // Referência correta para o caminho dos chats
+    const chatRef = ref(db, `chats/${chatId}/messages`);
 
     const unsubscribe = onValue(
       chatRef,
       (snapshot) => {
         const data = snapshot.val();
         if (data) {
-          const messagesArray = Object.values(data) as { user: string; ai: string }[]; // Convertendo as mensagens
+          const messagesArray = Object.values(data) as { user: string; ai: string }[];
           setChatHistory(messagesArray);
         }
         setLoading(false);
@@ -36,16 +37,16 @@ const ChatPage = () => {
     );
 
     return () => unsubscribe();
-  }, [id]);
+  }, [chatId]);
 
   const handleNewMessage = async (newMessage: { user: string; ai: string }) => {
-    const chatRef = ref(db, `chats/${id}/messages`);
-    await push(chatRef, newMessage); // Salvando a nova mensagem no Firebase
+    const chatRef = ref(db, `chats/${chatId}/messages`);
+    await push(chatRef, newMessage);
   };
 
   return (
     <div className="h-full flex flex-col items-center relative">
-      <div className="flex-1 overflow-auto w-full flex justify-center"> {/* Alterado para overflow-auto */}
+      <div className="flex-1 overflow-auto w-full flex justify-center">
         <div className="w-3/5 flex flex-col gap-5 p-4">
           {loading && <p>Loading chat history...</p>}
           {error && <p className="text-red-500">{error}</p>}
@@ -66,8 +67,8 @@ const ChatPage = () => {
           ))}
         </div>
       </div>
-      <div className="w-full flex justify-center"> {/* Mantém o NewPrompt no final */}
-        <NewPrompt onNewMessage={handleNewMessage} />
+      <div className="w-full flex justify-center">
+        <NewPrompt onNewMessage={handleNewMessage} id={chatId} />
       </div>
     </div>
   );

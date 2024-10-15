@@ -1,0 +1,11 @@
+.container {
+    a {
+        transition: 0.3s;
+
+        &:hover {
+            color: rgb(30, 209, 30);
+            background-color: rgb(50, 50, 50);
+            border-radius: 10px;
+        }
+    }
+}

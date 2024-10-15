@@ -4,6 +4,7 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { ref, onValue } from 'firebase/database'; // Importando apenas o necessário do Firebase
 import { db } from '../../config/FirebaseConfig'; // Importando a configuração centralizada do Firebase
+import "./chatList.css"
 
 const ChatList = () => {
   const [chatList, setChatList] = useState<{ id: string; title: string }[]>([]);
@@ -24,7 +25,7 @@ const ChatList = () => {
   }, []);
 
   return (
-    <div className='flex flex-col h-full'>
+    <div className='container flex flex-col h-full'>
       <span className='text-xl font-bold mb-4'>DASHBOARD</span>
       <Link href="/dashboard" className='p-2.5 rounded-md text-green-500'>
         New Chat

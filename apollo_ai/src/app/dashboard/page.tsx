@@ -12,34 +12,37 @@ export default function DashboardPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Gere um novo ID de chat
+    const newChatId = Date.now().toString();  // Gerando um chatId único
+
     try {
       const res = await fetch(`http://localhost:5000/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ text: message }),
+        body: JSON.stringify({ chatId: newChatId, text: message }), // Inclua o chatId aqui
       });
 
       if (!res.ok) {
         const errorData = await res.json();
-        throw new Error(errorData || "Error sending message");
+        throw new Error(errorData.error || "Error sending message");
       }
 
       const data = await res.json();
-      const newChatId = data.chatId;
 
-      // Salvando o novo chat no Firebase
+      // Salvando o novo chat no Firebase com a primeira mensagem enviada
       const db = getDatabase();
       const chatRef = ref(db, `chats/${newChatId}/messages`);
-      await set(chatRef, []); // Inicializa com um array vazio
+      await set(chatRef, [{ user: message, ai: data.text }]); // Inicializa com a mensagem enviada
 
+      // Redireciona para a página de chat com o novo ID
       router.push(`dashboard/chats/${newChatId}`);
     } catch (error: any) {
       console.error("Error: " + error);
       setError(error.message || "Unknown error!");
     }
-  }
+  };
 
   return (
     <div className="h-full flex flex-col items-center">
@@ -65,15 +68,15 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
-      <div className="mt-auto w-2.5/5 bg-[#2c2937] rounded-5 flex">
-        <form onSubmit={handleSubmit} className='w-full h-full flex items-center justify-between gap-5 mb-2.5'>
+      <div className="mt-auto w-2.5/5 bg-[#2c2937] rounded-xl flex">
+        <form onSubmit={handleSubmit} className='bg-[#2c2937] rounded-3xl flex items-center gap-5 p-0.5'>
           <input
             type="text"
             name='text'
             placeholder='ask anything...'
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            className='flex-1 p-5 bg-transparent border-none outline-none color-[#ececec]' />
+            className='flex-1 p-5 border-none outline-none bg-transparent text-[#ececec]' />
           <button
             type='submit'
             className='bg-[#605e68] rounded-2.5/5 border-none cursor-pointer p-2.5 flex items-center justify-center mr-5 rounded-3xl'>
