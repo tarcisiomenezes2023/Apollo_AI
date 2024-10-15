@@ -15,7 +15,7 @@ const ChatList = () => {
     const unsubscribe = onValue(chatRef, (snapshot) => {
       const data = snapshot.val();
       if (data) {
-        const chatsArray = Object.keys(data).map(id => ({ id, title: `Chat ${id}` }));
+        const chatsArray = Object.keys(data).map(id => ({ id, title: `${id}` }));
         setChatList(chatsArray);
       }
     });

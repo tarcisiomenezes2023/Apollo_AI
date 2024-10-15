@@ -1,11 +1,11 @@
-// src/app/components/chatPage/page.tsx
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import { db } from '../../../config/FirebaseConfig'; // Importa o db corretamente
-import { ref, onValue } from 'firebase/database'; // Funções do Realtime Database
+import React, { useEffect, useState } from "react";
+import { ref, onValue, push } from "firebase/database"; // Importando push para adicionar novas mensagens
+import { db } from '../../../config/FirebaseConfig'; // Usando db ao invés de database
 import { useParams } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
+import NewPrompt from "../../../components/newPrompt/page"; // Importando o NewPrompt
 
 const ChatPage = () => {
   const { id } = useParams();
@@ -16,12 +16,12 @@ const ChatPage = () => {
   useEffect(() => {
     if (!id) return;
 
-    const chatRef = ref(db, `chats/${id}`); // Usando o db corretamente
+    const chatRef = ref(db, `chats/${id}/messages`); // Referência correta para o caminho dos chats
 
     const unsubscribe = onValue(
       chatRef,
       (snapshot) => {
-        const data = snapshot.val()?.messages; // Acessando as mensagens corretamente
+        const data = snapshot.val();
         if (data) {
           const messagesArray = Object.values(data) as { user: string; ai: string }[]; // Convertendo as mensagens
           setChatHistory(messagesArray);
@@ -38,9 +38,14 @@ const ChatPage = () => {
     return () => unsubscribe();
   }, [id]);
 
+  const handleNewMessage = async (newMessage: { user: string; ai: string }) => {
+    const chatRef = ref(db, `chats/${id}/messages`);
+    await push(chatRef, newMessage); // Salvando a nova mensagem no Firebase
+  };
+
   return (
     <div className="h-full flex flex-col items-center relative">
-      <div className="flex-1 overflow-scroll w-full flex justify-center">
+      <div className="flex-1 overflow-auto w-full flex justify-center"> {/* Alterado para overflow-auto */}
         <div className="w-3/5 flex flex-col gap-5 p-4">
           {loading && <p>Loading chat history...</p>}
           {error && <p className="text-red-500">{error}</p>}
@@ -60,6 +65,9 @@ const ChatPage = () => {
             </div>
           ))}
         </div>
+      </div>
+      <div className="w-full flex justify-center"> {/* Mantém o NewPrompt no final */}
+        <NewPrompt onNewMessage={handleNewMessage} />
       </div>
     </div>
   );
