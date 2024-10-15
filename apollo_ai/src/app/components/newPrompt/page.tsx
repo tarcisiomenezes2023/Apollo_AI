@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 interface NewPromptProps {
-  onNewMessage: (newMessage: { user: string, ai: string }) => void;
+  onNewMessage: (newMessage: { user: string; ai: string }) => void;
 }
 
 const NewPrompt: React.FC<NewPromptProps> = ({ onNewMessage }) => {
@@ -18,7 +18,7 @@ const NewPrompt: React.FC<NewPromptProps> = ({ onNewMessage }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ text: message }), // Mudança aqui para 'text'
+        body: JSON.stringify({ text: message }),
       });
 
       if (!res.ok) {
