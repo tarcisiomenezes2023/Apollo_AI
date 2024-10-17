@@ -2,26 +2,29 @@
 
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
-import { ref, onValue } from 'firebase/database'; // Importando apenas o necessário do Firebase
-import { db } from '../../config/FirebaseConfig'; // Importando a configuração centralizada do Firebase
-import "./chatList.css"
+import "./chatList.css";
 
 const ChatList = () => {
   const [chatList, setChatList] = useState<{ id: string; title: string }[]>([]);
 
   useEffect(() => {
-    const chatRef = ref(db, 'chats'); // Referência para o caminho dos chats
-
-    // Função para ouvir as atualizações dos chats
-    const unsubscribe = onValue(chatRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        const chatsArray = Object.keys(data).map(id => ({ id, title: `${id}` }));
-        setChatList(chatsArray);
+    // Função para buscar a lista de chats do backend
+    const fetchChats = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/chats");
+        if (!res.ok) throw new Error("Erro ao buscar chats");
+    
+        const data = await res.json();
+        if (data && data.chats) {
+          const chatsArray = Object.keys(data.chats).map(id => ({ id, title: `${id}` }));
+          setChatList(chatsArray);
+        }
+      } catch (error) {
+        console.error("Erro ao buscar a lista de chats:", error);
       }
-    });
+    };
 
-    return () => unsubscribe();
+    fetchChats();
   }, []);
 
   return (

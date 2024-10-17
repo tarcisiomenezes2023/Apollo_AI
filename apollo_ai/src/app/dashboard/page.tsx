@@ -2,7 +2,6 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { getDatabase, ref, set } from "firebase/database"; // Importando o Firebase
 
 export default function DashboardPage() {
   const [message, setMessage] = useState("");
@@ -12,10 +11,11 @@ export default function DashboardPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Gere um novo ID de chat
-    const newChatId = Date.now().toString();  // Gerando um chatId único
+    const newChatId = Date.now().toString(); // Gerando um chatId único
 
     try {
+      console.log(`Enviando mensagem: ${message}`);
+
       const res = await fetch(`http://localhost:5000/chat`, {
         method: "POST",
         headers: {
@@ -30,17 +30,29 @@ export default function DashboardPage() {
       }
 
       const data = await res.json();
-
-      // Salvando o novo chat no Firebase com a primeira mensagem enviada
-      const db = getDatabase();
-      const chatRef = ref(db, `chats/${newChatId}/messages`);
-      await set(chatRef, [{ user: message, ai: data.text }]); // Inicializa com a mensagem enviada
+      console.log("Resposta do backend:", data);
 
       // Redireciona para a página de chat com o novo ID
       router.push(`dashboard/chats/${newChatId}`);
     } catch (error: any) {
       console.error("Error: " + error);
       setError(error.message || "Unknown error!");
+    }
+  };
+
+  // Função para buscar a lista de chats
+  const fetchChats = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/chats");
+      if (!res.ok) {
+        throw new Error("Erro ao buscar chats");
+      }
+
+      const data = await res.json();
+      // Aqui você poderia atualizar o estado que contém a lista de chats
+      // Por exemplo, se você tivesse um estado de chatList
+    } catch (error) {
+      console.error("Erro ao buscar a lista de chats:", error);
     }
   };
 

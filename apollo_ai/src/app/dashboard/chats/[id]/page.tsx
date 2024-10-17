@@ -1,8 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { ref, onValue, push } from "firebase/database";
-import { db } from '../../../config/FirebaseConfig';
 import { useParams } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 import NewPrompt from "../../../components/newPrompt/page";
@@ -16,32 +14,47 @@ const ChatPage = () => {
 
   useEffect(() => {
     if (!chatId) return;
-
-    const chatRef = ref(db, `chats/${chatId}/messages`);
-
-    const unsubscribe = onValue(
-      chatRef,
-      (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-          const messagesArray = Object.values(data) as { user: string; ai: string }[];
-          setChatHistory(messagesArray);
-        }
-        setLoading(false);
-      },
-      (errorObject) => {
-        console.error('Erro ao buscar histórico de mensagens:', errorObject);
+  
+    const fetchChatHistory = async () => {
+      try {
+        const res = await fetch(`http://localhost:5000/chats/${chatId}`);
+        if (!res.ok) throw new Error('Failed to load chat history');
+        const data = await res.json();
+        setChatHistory(data.messages); // Isso agora deve ser um array
+      } catch (error) {
+        console.error('Erro ao buscar histórico de mensagens:', error);
         setError('Failed to load chat history.');
+      } finally {
         setLoading(false);
       }
-    );
-
-    return () => unsubscribe();
+    };
+  
+    fetchChatHistory();
   }, [chatId]);
 
   const handleNewMessage = async (newMessage: { user: string; ai: string }) => {
-    const chatRef = ref(db, `chats/${chatId}/messages`);
-    await push(chatRef, newMessage);
+    try {
+      const res = await fetch(`http://localhost:5000/chat`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ chatId, text: newMessage.user }),
+      });
+  
+      if (!res.ok) throw new Error('Error sending message');
+      const updatedChat = await res.json();
+  
+      // Atualiza o histórico de mensagens na página
+      setChatHistory(prev => [...prev, newMessage]); // Adiciona a nova mensagem
+  
+      // Adiciona o novo chat ao chatList (se necessário)
+      // Aqui você pode implementar a lógica para adicionar o novo chat ao chatList
+      // Você pode usar uma função que atualiza o estado no componente pai ou uma função global
+    } catch (error) {
+      console.error("Erro ao enviar nova mensagem:", error);
+      setError("Error sending message.");
+    }
   };
 
   return (

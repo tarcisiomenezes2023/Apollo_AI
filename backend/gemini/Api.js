@@ -1,25 +1,22 @@
-require('dotenv').config();
-const { GoogleGenerativeAI } = require('@google/generative-ai');
+require('dotenv').config(); // Carrega as variáveis de ambiente do arquivo .env
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 
-/* Initialize the API with the key */
-const genAI = new GoogleGenerativeAI(process.env.API_KEY);
+// Inicializa o modelo com a chave de API do arquivo .env
+const genAI = new GoogleGenerativeAI(process.env.GEM_API_KEY);
+
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 async function runGeminiAI(prompt) {
     try {
-        /* the correct model */
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
-        /* calling the method generativeContent with the prompt */
-        const result = await model.generateContent(prompt);
-
-        /* verifying the return and result */
-        const responseText = result.response.text();  /* Result = text/string */
-        console.log("Generated text:", responseText);
-
-        return { text: responseText };
+        // Gera conteúdo com o modelo
+        const message = await model.generateContent(prompt);
+        const response = await message.response;
+        const text = await response.text();
+        
+        return text;
     } catch (error) {
-        console.error('Error generating content:', error);
-        throw error;
+        console.error("Erro ao gerar conteúdo:", error);
+        throw new Error("Erro ao se comunicar com a API do Gemini AI");
     }
 }
 
