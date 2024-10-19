@@ -6,17 +6,17 @@ import { TypeAnimation } from "react-type-animation";
 
 export default function Home() {
   return (
-    <div className="flex items-center gap-24 h-full">
+    <div className="flex flex-col gap-0 lg:gap-24 h-full lg:flex-row">
       <img src="/background2.jpg" alt="background homepage" className="backgroundHomepage one" />
       <img src="/background2.jpg" alt="background homepage" className="backgroundHomepage two" />
       <img src="/background2.jpg" alt="background homepage" className="backgroundHomepage three" />
       <img src="/background2.jpg" alt="background homepage" className="backgroundHomepage four" />
       <img src="/background2.jpg" alt="background homepage" className="backgroundHomepage five" />
-      <div className="flex-1 flex flex-col items-center justify-center gap-2.5 text-center">
-        <h1 className="text-9xl bg-gradient-to-r from-[#33ff28] to-[#e55571] bg-clip-text text-transparent font-bold">
+      <div className="flex-1 flex flex-col items-center justify-center lg:gap-2.5 gap-1 text-center">
+        <h1 className="lg:text-9xl text-5xl bg-gradient-to-r from-[#33ff28] to-[#e55571] bg-clip-text text-transparent font-bold">
           Apollo
         </h1>
-        <h2 className="text-2xl font-bold max-h-4/5 bg-gradient-to-r from-[#0bbe0e] to-[#9ff6c6] bg-clip-text text-transparent px-6 py-4">
+        <h2 className="lg:text-2xl text-xl font-bold max-h-4/5 bg-gradient-to-r from-[#0bbe0e] to-[#9ff6c6] bg-clip-text text-transparent px-6 py-4">
           Your AI Environmental Engineer!
         </h2>
         <h3 className="text-base text-[#bbf7d0]">
@@ -40,7 +40,7 @@ export default function Home() {
             className="apollo w-full h-full object-contain animate-botAnimate"
           />
           <div className="absolute bottom-1.5 right-0 flex items-center gap-2.5 p-1.5 max-w-full bg-[#3c3c47] rounded-xl">
-            <img src="/Apollo2.png" alt="Hero Chat" className="w-8 h-8" />
+            <img src="/Apollo2.png" alt="Hero Chat" className="w-5 h-5 lg:h-8 lg:w-8" />
             <TypeAnimation
               className="text"
               sequence={[
@@ -66,7 +66,7 @@ export default function Home() {
             />
           </div>
         </div>
-        <footer className="absolute bottom-0 right-60">
+        <footer className="absolute bottom-0 left-2.5 mt-5">
           <a href="https://tarcisiomenezes.netflify.app" target="blank" className="flex items-center">
             <img src="/websiteIcon.png" alt="WebIcon" className="h-5 w-5 mr-2.5" />
             <span>By Tarcísio Menezes</span>

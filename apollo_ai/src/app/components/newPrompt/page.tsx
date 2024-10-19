@@ -20,6 +20,10 @@ const NewPrompt: React.FC<NewPromptProps> = ({ onNewMessage, id }) => {
     setIsLoading(true);
 
     try {
+      // Cria um objeto para a nova mensagem
+      const newMessage = { user: message, ai: "" }; // Placeholder para AI
+
+      // Chama a função de adicionar nova mensagem
       const res = await fetch("http://localhost:5000/chat", {
         method: "POST",
         headers: {
@@ -33,9 +37,8 @@ const NewPrompt: React.FC<NewPromptProps> = ({ onNewMessage, id }) => {
       }
 
       const data = await res.json();
-
-      const newMessage = { user: message, ai: data.text };
-      onNewMessage(newMessage);
+      // Adiciona a nova mensagem com resposta da AI
+      onNewMessage({ user: message, ai: data.text });
 
       setMessage(""); // Limpa o input
     } catch (error) {
@@ -46,7 +49,7 @@ const NewPrompt: React.FC<NewPromptProps> = ({ onNewMessage, id }) => {
   };
 
   return (
-    <div className="mt-5 w-3/5">
+    <div className="mt-5 w-5/5 sm:w-3/5">
       <form
         onSubmit={handleSubmit}
         className="bg-[#2c2937] rounded-3xl flex items-center gap-5 p-0.5"

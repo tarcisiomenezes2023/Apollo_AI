@@ -10,6 +10,10 @@
   .bg {
     background-image: url("/Apollo_background.jpg");
     background-size: auto 100%;
+
+    @media screen and (max-width: 1024px) {
+      background-size: auto 150%;
+    }
   }
   
   .animate-slideBg {
@@ -38,31 +42,62 @@
     height: 250px;
     width: 250px;
     border-radius: 50%;
+
+    
+    @media screen and (max-width: 1024px) {
+      height: 0px;
+      width: 0px;
+    }
 }
 
 .backgroundHomepage.one {
     top: 100px;
     left: 40px;
+
+    @media screen and (max-width: 1024px) {
+      top: 50px;
+      left: 80px;
+    }
 }
 
 .backgroundHomepage.two {
     top: 200px;
     left: 300px;
+
+    @media screen and (max-width: 1024px) {
+      top: 200px;
+      left: 80px;
+    }
 }
 
 .backgroundHomepage.three {
     top: 400px;
     left: 600px;
+
+    @media screen and (max-width: 1024px) {
+      top: 130px;
+      left: 450px;
+    }
 }
 
 .backgroundHomepage.four {
-    top: 50px;
-    left: 600px;
+    top: 30px;
+    left: 900px;
+
+    @media screen and (max-width: 1024px) {
+      top: 100px;
+      left: 300px;
+    }
 }
 
 .backgroundHomepage.five {
     top: 10px;
-    left: 1000px;
+    left: 500px;
+
+    @media screen and (max-width: 1024px) {
+      top: 20px;
+      left: 400px;
+    }
 }
 
 @keyframes rotateOrbital {
