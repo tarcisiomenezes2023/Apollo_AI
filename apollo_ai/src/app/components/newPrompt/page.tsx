@@ -1,29 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Socket } from "../../../Socket";
 
 interface NewPromptProps {
-  onNewMessage: (newMessage: { user: string; ai: string }) => void;
   id: string;
 }
 
-const NewPrompt: React.FC<NewPromptProps> = ({ onNewMessage, id }) => {
+const NewPrompt: React.FC<NewPromptProps> = ({ id }) => {
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!message.trim()) return; // Evita enviar mensagens vazias
-    if (isLoading) return; // Evita múltiplos envios
+    if (!message.trim() || isLoading) return; /* veryfing if the message is empty */
 
     setIsLoading(true);
 
     try {
-      // Cria um objeto para a nova mensagem
-      const newMessage = { user: message, ai: "" }; // Placeholder para AI
-
-      // Chama a função de adicionar nova mensagem
       const res = await fetch("http://localhost:5000/chat", {
         method: "POST",
         headers: {
@@ -37,16 +32,27 @@ const NewPrompt: React.FC<NewPromptProps> = ({ onNewMessage, id }) => {
       }
 
       const data = await res.json();
-      // Adiciona a nova mensagem com resposta da AI
-      onNewMessage({ user: message, ai: data.text });
+      
+      /* emit a new message through socket.io */
+      Socket.emit("newMessage", { user: message, ai: data.text, chatId: id });
 
-      setMessage(""); // Limpa o input
+      setMessage(""); /* clean the input */
     } catch (error) {
       console.error("Erro ao enviar a mensagem:", error);
     } finally {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    /* join chat */
+    Socket.emit("joinChat", id);
+
+    return () => {
+      /* clean the event when the component is destroyed */
+      Socket.off("newMessage");
+    };
+  }, [id]);
 
   return (
     <div className="mt-5 w-5/5 sm:w-3/5">
@@ -64,8 +70,8 @@ const NewPrompt: React.FC<NewPromptProps> = ({ onNewMessage, id }) => {
         />
         <button
           type="submit"
-          disabled={isLoading || !message.trim()}
-          className={`bg-[#605e68] rounded-2.5/5 border-none cursor-pointer p-2.5 flex items-center justify-center mr-5 rounded-3xl ${
+          disabled={isLoading || !message.trim()} /* Deactive the button when the message is not loaded */
+          className={`bg-[#605e68] rounded-3xl border-none cursor-pointer p-2.5 flex items-center justify-center mr-5 ${
             isLoading ? "cursor-not-allowed opacity-50" : ""
           }`}
         >
@@ -77,3 +83,4 @@ const NewPrompt: React.FC<NewPromptProps> = ({ onNewMessage, id }) => {
 };
 
 export default NewPrompt;
+                     

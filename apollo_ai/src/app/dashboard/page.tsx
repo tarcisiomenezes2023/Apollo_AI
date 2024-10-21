@@ -11,7 +11,7 @@ export default function DashboardPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const newChatId = Date.now().toString(); // Gerando um chatId único
+    const newChatId = Date.now().toString(); /* generate unique id */
 
     try {
       console.log(`Enviando mensagem: ${message}`);
@@ -21,7 +21,7 @@ export default function DashboardPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ chatId: newChatId, text: message }), // Inclua o chatId aqui
+        body: JSON.stringify({ chatId: newChatId, text: message }), /* chatId incuded here */
       });
 
       if (!res.ok) {
@@ -32,27 +32,11 @@ export default function DashboardPage() {
       const data = await res.json();
       console.log("Resposta do backend:", data);
 
-      // Redireciona para a página de chat com o novo ID
+      /* Redirect to dashboard/chats/ with the new ID */
       router.push(`dashboard/chats/${newChatId}`);
     } catch (error: any) {
       console.error("Error: " + error);
       setError(error.message || "Unknown error!");
-    }
-  };
-
-  // Função para buscar a lista de chats
-  const fetchChats = async () => {
-    try {
-      const res = await fetch("http://localhost:5000/chats");
-      if (!res.ok) {
-        throw new Error("Erro ao buscar chats");
-      }
-
-      const data = await res.json();
-      // Aqui você poderia atualizar o estado que contém a lista de chats
-      // Por exemplo, se você tivesse um estado de chatList
-    } catch (error) {
-      console.error("Erro ao buscar a lista de chats:", error);
     }
   };
 
@@ -81,20 +65,20 @@ export default function DashboardPage() {
         </div>
       </div>
       <div className="mt-auto w-5/5 sm:w-4/5 md:w-3/5 bg-[#2c2937] rounded-xl flex">
-      <form onSubmit={handleSubmit} className='w-full bg-[#2c2937] rounded-3xl flex items-center gap-5 p-0.5'>
-        <input
-          type="text"
-          name='text'
-          placeholder='ask anything...'
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          className='flex-1 p-5 border-none outline-none bg-transparent text-[#ececec]' />
-        <button
-          type='submit'
-          className='bg-[#605e68] rounded-3xl border-none cursor-pointer p-2.5 flex items-center justify-center'>
-          <img src="/arrow.png" alt="send icon" className='w-5 h-5' />
-        </button>
-      </form>
+        <form onSubmit={handleSubmit} className='w-full bg-[#2c2937] rounded-3xl flex items-center gap-5 p-0.5'>
+          <input
+            type="text"
+            name='text'
+            placeholder='ask anything...'
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            className='flex-1 p-5 border-none outline-none bg-transparent text-[#ececec]' />
+          <button
+            type='submit'
+            className='bg-[#605e68] rounded-3xl border-none cursor-pointer p-2.5 flex items-center justify-center'>
+            <img src="/arrow.png" alt="send icon" className='w-5 h-5' />
+          </button>
+        </form>
         {error && (
           <div className='text-red-500 mt-5'>
             {error}

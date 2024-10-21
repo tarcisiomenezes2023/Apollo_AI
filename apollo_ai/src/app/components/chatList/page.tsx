@@ -9,7 +9,7 @@ const ChatList = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    // Função para buscar a lista de chats do backend
+     /* function to fetch list of chats from the backend */
     const fetchChats = async () => {
       try {
         const res = await fetch("http://localhost:5000/chats");
@@ -38,11 +38,11 @@ const ChatList = () => {
         {isOpen ? (
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          </svg>  // Ícone "X"
+          </svg>  /* Icon X */
         ) : (
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
-          </svg>  // Ícone de hambúrguer
+          </svg>  /* Hamburguer icon */
         )}
       </button>
       {isOpen && (

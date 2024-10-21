@@ -1,4 +1,4 @@
-require('dotenv').config(); // Carrega as variáveis de ambiente do arquivo .env
+require('dotenv').config(); 
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 // Inicializa o modelo com a chave de API do arquivo .env
